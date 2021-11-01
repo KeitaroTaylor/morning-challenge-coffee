@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+    <title>Keitaro's Koffee Orders</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+
+
+<body>
+    <div class="container-l bg-dark mt-3 mx-2 rounded-3 pb-5">
+        <nav class="navbar navbar-light m-3">
+            <div class="container-fluid">
+                <a href="/" class="navbar-brand text-light text-start fs-2 d-flex justify-content-start">Keitaro's Koffee</a>
+                <div>
+                <% if (user.local.email) { %>
+                    <a href="/unlink/local" class="btn btn-outline-light fs-4 m-2">Unlink</a>
+                <% } else { %>
+                    <a href="/connect/local" class="btn btn-outline-light fs-4 m-2">Connect Local</a>
+                <% } %>
+                <a href="/logout" class="btn btn-outline-light fs-4 m-2">Logout</a>
+            </div>
+        </nav>
+
+        <div class="w-100 m-3 clearfix fs-3">
+          <div class="d-flex justify-content-center float float-start mx-2 text-light">Barista: </div>
+          <div class="d-flex justify-content-start float float-start text-success"><span> </span><%= user.local.name%> </div>
+        </div>
+
+        <% let orderCurrent = 0 %>
+        <% let orderCompleted = 0 %>
+        <% for (i=0; i<orders.length; i++) { %>
+          <% ! (orders[i].completed) ? orderCurrent++ : orderCompleted++ %>
+        <% } %>
+
+        <h2 class="text-center text-light">Current Orders (<%=orderCurrent%>)</h2>
+
+        <% let count = 0 %>
+        <% let firstOrder %>
+        <% let largeText %>
+
+        <div class=" p-3 m-3 rounded-3 clearfix">
+          <% for(var i=0; i<orders.length; i++) {%>
+            <% if (orders[i].completed === false) { %>
+          <ul class="list-group flex-row">
+          <% if (count === 0) { %>
+            <% firstOrder = 'list-group-item-primary' %>
+            <% largeText = 'fs-2' %>
+          <% } else { %>
+            <% firstOrder = '' %>
+            <% largeText = 'fs-4' %>
+            <% } %>
+            <li class="list-group-item <%=firstOrder%> <%=largeText%> text-wrap float-start w-100">
+              <span class="text-wrap w-75 float float-start d-block">
+                <span><%= orders[i].size %></span>
+                <span><%= orders[i].order %></span>
+                <% if (orders[i].with !== '') { %>
+                <span>with</span>
+                <span><%= orders[i].with %></span>
+                <% } %>
+                <span class="text-wrap">for</span>
+                <span class="text-wrap"><%= orders[i].name %></span>
+              </span>
+              <% if (count === 0) { %>
+              <span class="w-25 d-flex align-items-center justify-content-center d-block">
+                <button class="fa fa-completed btn btn-success fs-4 w-50 d-block text-break word-wrap">Completed?</button>
+                <i class="fa fa-trash w-50 d-flex align-items-center justify-content-center" aria-hidden="true"></i>
+              </span>
+              <% } else { %>
+              <span class="w-25 d-flex align-items-center justify-content-end d-block">
+                <i class="fa fa-trash w-50 d-flex align-items-center justify-content-center" aria-hidden="true"></i>
+              </span>
+              <% } %>
+              <% count++ %>
+            </li>
+          </ul>
+            <% } %>
+          <% } %>
+        </div>
+
+
+
+        <h2 class="text-center text-light">Completed Orders (<%=orderCompleted%>)</h2>
+
+      <div class="p-3 m-3 rounded-3 clearfix">
+        <% for(var i=0; i<orders.length; i++) {%>
+            <% if (orders[i].completed) { %>
+          <ul class="list-group flex-row">
+            <li class="list-group-item text-wrap fs-4 float-start w-100">
+              <span class="text-wrap w-75 float float-start d-block">
+                <span><%= orders[i].size %></span>
+                <span><%= orders[i].order %></span>
+                <% if (orders[i].with != '') { %>
+                <span>with</span>
+                <span><%= orders[i].with %></span>
+                <% } %>
+                <span>for</span>
+                <span><%= orders[i].name %></span>
+                <span class="text-success"> [ made by </span>
+                <span class="text-success"><%= orders[i].barista %> ]</span>
+              </span>
+              <span class="w-25 d-flex align-items-center justify-content-end d-block">
+                <i class="fa fa-trash w-50 d-flex align-items-center justify-content-center" aria-hidden="true"></i>
+              </span>
+            </li>
+          </ul>
+        <% } %>
+      <% } %>
+      </div>
+
+
+
+
+    </div>
+<script src="main.js"></script>
+
+</body>
+</html>
